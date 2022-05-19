@@ -1,0 +1,31 @@
+.template {
+  background: url("img/punk.jpg");
+  background-repeat: no-repeat;
+  width: 100%;
+  background-size: cover;
+}
+
+@media (max-width: 991.98px) {
+  .foot-organisasi {
+    position: absolute;
+    bottom: -100px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .foot-organisasi {
+    position: absolute;
+    bottom: 0px;
+  }
+}
+
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+
+/* style="margin-top: 200px; margin-bottom: -200px;" */
+/* #e9ecef */
