@@ -8,24 +8,18 @@
         if(isset($_POST["email"]) && isset($_POST["password"])){
             $emailSubmit = mysqli_real_escape_string($connectionDB, htmlspecialchars($_POST["email"]));
             $passwordSubmit = mysqli_real_escape_string($connectionDB, htmlspecialchars($_POST["password"]));
-            
-            // $resultEnrypt = encryptPassword($passwordSubmit);
-            // var_dump($resultEnrypt);
 
             $querySql = "SELECT * FROM user_login 
                 WHERE email = '$emailSubmit'";
 
             $resultData = configurationDB($querySql);
-            
 
             // pengecek login
             confirmAccount($resultData, $emailSubmit, $passwordSubmit);
-
-
-        }
-    }
-
+        };
+    };
 ?>
+
 
 
 <!doctype html>
@@ -51,8 +45,9 @@
             <div class="row d-flex align-items-center justify-content-center h-100">
                 <div class="col-md-8 col-lg-7 col-xl-6">
                     <article>
-                        <h1 class="font-weight-bold">Lorem ipsum dolor sit amet <span class="text-primary">asddds
-                                consectetur.</span></h1>
+                        <h1 class="font-weight-bold">Sign in Account Admin<span class="text-primary"> Make
+                                freely.</span>
+                        </h1>
                     </article>
                     <div class="image d-flex justify-content-center">
                         <img src="../../img/mobileLogin.svg" class="img-fluid" width="90%">
