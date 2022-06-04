@@ -7,7 +7,7 @@
     if(isset($_POST["submit"])){
         
         if(isset($_POST["email"]) && isset($_POST["password"])){    
-            $resultDataAdd = addDataAdmin($_POST);
+            $resultDataAdd = addDataAdmin($_POST, "user_login");
 
             if($resultDataAdd > 0){
 
@@ -81,39 +81,7 @@
     </div>
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="sampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Update Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="dashboard.php?dashboard=data_user" method="POST">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input required type="email" name="email" class="form-control" id="exampleInputEmail1"
-                                aria-describedby="emailHelp">
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                                else.</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input required type="password" name="password" class="form-control"
-                                id="exampleInputPassword1">
-                        </div>
 
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" name="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <div class="container mt-5">
@@ -136,7 +104,7 @@
                         <td><?php echo $data["email"]; ?></td>
                         <td><?php echo $data["password"]; ?></td>
                         <td>
-                            <a href="delete.php?id=<?php echo $data['id']; ?>">
+                            <a href="delete.php?id=<?php echo $data['id']; ?>&user=<?php echo $data['id']; ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                                     class="bi bi-trash3 " viewBox="0 0 16 16">
                                     <path
@@ -145,7 +113,7 @@
                             </a>
                         </td>
                         <td>
-                            <a href=" update.php?id_update=<?php echo $data['id']; ?>">
+                            <a href=" update.php?id_update=<?php echo $data['id']; ?>&user=<?php echo $data['id']; ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" style="cursor: pointer;"
                                     data-bs-toggle="modal" data-bs-target="#sampleModal" fill="currentColor"
                                     class="bi bi-gear " viewBox="0 0 16 16">

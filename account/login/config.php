@@ -27,11 +27,11 @@
         }
     }
 
-    function getDataId($id){
+    function getDataId($id, $tabelName){
         global $connectionDB;
 
         
-        $getDataSql = "SELECT * FROM user_login WHERE id='$id'";
+        $getDataSql = "SELECT * FROM $tabelName WHERE id='$id'";
 
         $resultDB = mysqli_query($connectionDB, $getDataSql);
         if(mysqli_affected_rows($connectionDB) > 0){
@@ -84,49 +84,220 @@
     }
 
 
-    function addDataAdmin($data){
+    function addDataAdmin($data, $tabelName){
         global $connectionDB;
 
-        $emailSubmit = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["email"]));
-        $passwordSubmit = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["password"]));
+        if($tabelName == "user_login"){
+            $emailSubmit = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["email"]));
+            $passwordSubmit = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["password"]));
+    
+            $resultEncrypt = password_hash($passwordSubmit, PASSWORD_DEFAULT);
+    
+    
+            $addQuerySql = "INSERT INTO user_login
+            VALUES (0, '$emailSubmit', '$resultEncrypt')";
+    
+            mysqli_query($connectionDB, $addQuerySql);
+            return mysqli_affected_rows($connectionDB);
+        
+        }else{
+            $namaKegiatan = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["nameKegiatan"]));
+            $deskripsi = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["deskripsi"]));
+            $resultImage = uploadImage($_FILES);
+        
+            if($resultImage){
+                $addQuerySql = "INSERT INTO user_kegiatan
+                VALUES (0, '$namaKegiatan', '$deskripsi', '$resultImage')";
+        
+                mysqli_query($connectionDB, $addQuerySql);
+                return mysqli_affected_rows($connectionDB);
+            }
 
-        $resultEncrypt = password_hash($passwordSubmit, PASSWORD_DEFAULT);
+            return false;
+        }
+    }
+    
 
 
-        $addQuerySql = "INSERT INTO user_login
-        VALUES (0, '$emailSubmit', '$resultEncrypt')";
+    $uploadOk = 1;
+    function uploadImage($image){
+        if(!$image["fileToUpload"]["error"] == 4){
+            $target_dir = "uploads/";
+            $target_file = $target_dir . basename($image["fileToUpload"]["name"]);
+            $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    
+    
+            // Check if image file is a actual image or fake image
+            
+            $check = getimagesize($image["fileToUpload"]["tmp_name"]);
+            $resultImg = genereteNameImg($imageFileType);
+        }
 
-        mysqli_query($connectionDB, $addQuerySql);
+
+        
+        if(imgIsNull($image) && checkImg($check) && imgIsAlready($target_dir.$resultImg)
+        && limitImgSize($image) && allowFormatFile($imageFileType)){
+            
+            finishUploadImg($image, $target_dir.$resultImg);
+            return $resultImg;
+        
+        };
+
+        return false;
+    }
+
+    // generate new name file img
+    function genereteNameImg($imageFileType){
+        $newNameFileImg = uniqid();
+        $newNameFileImg .= ".";
+        $newNameFileImg .= $imageFileType;
+
+        return $newNameFileImg;
+    }
+
+    function imgIsNull($image){
+        if($image["fileToUpload"]["error"] == 4){
+            echo "<script>
+                alert('Must have image');
+            </script>";
+            return false;
+        
+        }else{
+            return true;
+        }
+    }
+
+    // Check if image file is a actual image or fake image
+    function checkImg($check){
+        global $uploadOk;
+
+        if($check == false) {
+            echo "<script>
+                alert('File is not an image.');
+            </script>";
+            $uploadOk = 0;
+            return false;
+        
+        }else{
+            return true;
+        }
+    }
+
+    //  Check if file already exists
+    function imgIsAlready($target_file){
+        global $uploadOk;
+
+        if (file_exists($target_file)) {
+            echo "<script>
+                alert('Sorry, file already exists.');
+            </script>";
+            
+            $uploadOk = 0;
+            return false;
+        
+        }else{
+            return true;
+        }
+    }
+
+    // Check file size
+    function limitImgSize($image){
+        global $uploadOk;
+
+        if ($image["fileToUpload"]["size"] > 5000000) {            
+            echo "<script>
+                alert('Sorry, your file is too large.');
+            </script>";
+            $uploadOk = 0;
+            return false;
+        
+        }else{
+            return true;
+        }
+    }
+
+
+    function allowFormatFile($imageFileType){
+        global $uploadOk;
+
+        // Allow certain file formats
+        $formatImg = ["jpg", "png", "jpeg"];
+
+        if(!in_array($imageFileType, $formatImg)){
+            echo "<script>
+                alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed. and = $imageFileType');
+            </script>";
+            $uploadOk = 0;
+            return false;
+        
+        }else{
+            return true;
+        }
+    }
+
+
+    // if everything is ok, try to upload fil
+    function finishUploadImg($image, $target_file){
+        if (move_uploaded_file($image["fileToUpload"]["tmp_name"], $target_file)) {
+            // echo "The file ". htmlspecialchars( basename( $image["fileToUpload"]["name"])). " has been uploaded.";
+        
+        } else {
+            echo "<script>
+                alert('Sorry, there was an error uploading your file.');
+            </script>";
+        }
+    }
+
+
+    function DeleteDataAdmin($querySql){
+        global $connectionDB;
+
+        
+        mysqli_query($connectionDB, $querySql);
         return mysqli_affected_rows($connectionDB);
+    }
+
+    function deleteImgInfolder($nameImg){
+        $path = "uploads/$nameImg";
+        unlink($path);
     }
 
 
 
 
-
-    function DeleteDataAdmin($idData){
+    function updateDataAdmin($idData, $data, $tabelName){
         global $connectionDB;
 
-        $deleteQuerySql = "DELETE FROM user_login WHERE id='$idData'";
-
-        mysqli_query($connectionDB, $deleteQuerySql);
-        return mysqli_affected_rows($connectionDB);
-    }
-
-
-    function updateDataAdmin($idData, $data){
-        global $connectionDB;
-
-        $passwordSubmit = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["updatePassword"]));
+        if($tabelName == "user_login"){
+            $passwordSubmit = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["updatePassword"]));
         
-        $resultEncrypt = password_hash($passwordSubmit, PASSWORD_DEFAULT);
-
-        $updateQuerySql = "UPDATE user_login 
-        SET password='$resultEncrypt' 
-        WHERE id='$idData'";
+            $resultEncrypt = password_hash($passwordSubmit, PASSWORD_DEFAULT);
+    
+            $updateQuerySql = "UPDATE user_login 
+            SET password='$resultEncrypt' 
+            WHERE id='$idData'";
+            
+            mysqli_query($connectionDB, $updateQuerySql);
+            return mysqli_affected_rows($connectionDB);
         
-        mysqli_query($connectionDB, $updateQuerySql);
-        return mysqli_affected_rows($connectionDB);
+        }else{
+            $updateKegiatan = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["namaKegiatanUpdate"]));
+            $updateDeskripsi = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["deskripsiUpdate"]));
+            $updateImage = uploadImage($_FILES);
+            if($updateImage){
+                $nameImgOld = getDataId($idData, $tabelName);
+                deleteImgInfolder($nameImgOld["foto"]);
+    
+                $updateQuerySql = "UPDATE $tabelName 
+                SET nama_kegiatan='$updateKegiatan', deskripsi='$updateDeskripsi', foto='$updateImage' 
+                WHERE id='$idData'";
+                
+                mysqli_query($connectionDB, $updateQuerySql);
+                return mysqli_affected_rows($connectionDB);
+            }
+
+            return false;
+        }
     }
 
 ?>
