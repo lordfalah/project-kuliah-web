@@ -183,13 +183,19 @@
 
     getExit.forEach(close => {
         close.addEventListener("click", () => {
-            window.location.assign('dashboard.php?dashboard=data_user');
+            const nameUrl = window.location.href.split("&").slice(-1)[0];
+            window.location.assign(
+                `dashboard.php?dashboard=${nameUrl === "kegiatan=21" ? "data_kegiatan" : "data_user"}`
+            );
         })
     })
 
     document.addEventListener("click", function(e) {
         if (e.target.getAttribute("id") === "myModal") {
-            window.location.assign('dashboard.php?dashboard=data_user');
+            const nameUrl = window.location.href.split("&").slice(-1)[0];
+            window.location.assign(
+                `dashboard.php?dashboard=${nameUrl === "kegiatan=21" ? "data_kegiatan" : "data_user"}`
+            );
         }
     })
     </script>
