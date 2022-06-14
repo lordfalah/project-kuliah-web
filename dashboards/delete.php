@@ -24,6 +24,9 @@
     
     }elseif(isset($_GET["mahasiswa"])){
         $idData = $_GET["mahasiswa"];
+
+        $nameImg = getDataId($idData, "user_mahasiswa");
+        deleteImgInfolder($nameImg["foto_mahasiswa"]);
         
         $resultData = DeleteDataAdmin("DELETE FROM user_mahasiswa WHERE id=$idData");
         if($resultData > 0){
