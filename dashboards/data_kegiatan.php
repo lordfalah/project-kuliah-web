@@ -84,9 +84,6 @@
     </div>
 
 
-
-
-
     <div class="container mt-5">
 
         <div class="table-responsive">
@@ -108,8 +105,8 @@
                         <td><?php echo $key+1; ?></td>
                         <td><?php echo $data["nama_kegiatan"]; ?></td>
                         <td><?php echo $data["deskripsi"]; ?></td>
-                        <td><img src="uploads/<?php echo $data['foto']; ?>" alt=<?php echo $data["nama_kegiatan"];?>
-                                width="200px" height="200px">
+                        <td><img src="uploads/<?php echo $data['foto_kegiatan']; ?>"
+                                alt=<?php echo $data["nama_kegiatan"];?> width="200px" height="200px">
                         </td>
                         <td>
                             <a href="delete.php?id=<?php echo $data['id']; ?>&kegiatan=<?php echo $data['id']; ?>">

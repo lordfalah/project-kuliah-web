@@ -94,11 +94,31 @@
             $resultEncrypt = password_hash($passwordSubmit, PASSWORD_DEFAULT);
     
     
-            $addQuerySql = "INSERT INTO user_login
+            $addQuerySql = "INSERT INTO $tabelName
             VALUES (0, '$emailSubmit', '$resultEncrypt')";
     
             mysqli_query($connectionDB, $addQuerySql);
             return mysqli_affected_rows($connectionDB);
+        
+        }elseif($tabelName == "user_mahasiswa"){
+            $nameMahasiswa = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["nameMahasiswa"]));
+            $tempat = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["tempat"]));
+            $nim_mahasiswa = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["nim_mahasiswa"]));
+            $email = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["email"]));
+            $date = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["date"]));
+            $gender = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["gender"]));
+            $telepon = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["telepon"]));
+            $alamat = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["alamat"]));
+            $resultImage = uploadImage($_FILES);
+
+            if($resultImage){
+                $addQuerySql = "INSERT INTO $tabelName
+                VALUES (0, '$nim_mahasiswa', '$nameMahasiswa', '$tempat', '$date', '$gender', '$alamat',
+                '$telepon', '$email', '$resultImage')";
+        
+                mysqli_query($connectionDB, $addQuerySql);
+                return mysqli_affected_rows($connectionDB);
+            }
         
         }else{
             $namaKegiatan = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["nameKegiatan"]));
@@ -106,7 +126,7 @@
             $resultImage = uploadImage($_FILES);
         
             if($resultImage){
-                $addQuerySql = "INSERT INTO user_kegiatan
+                $addQuerySql = "INSERT INTO $tabelName
                 VALUES (0, '$namaKegiatan', '$deskripsi', '$resultImage')";
         
                 mysqli_query($connectionDB, $addQuerySql);
@@ -280,16 +300,39 @@
             mysqli_query($connectionDB, $updateQuerySql);
             return mysqli_affected_rows($connectionDB);
         
+        }elseif($tabelName == "user_mahasiswa"){
+            $nameMahasiswa = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["nameMahasiswa"]));
+            $tempat = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["tempat"]));
+            $nim_mahasiswa = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["nim_mahasiswa"]));
+            $email = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["email"]));
+            $date = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["date"]));
+            $gender = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["gender"]));
+            $telepon = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["telepon"]));
+            $alamat = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["alamat"]));
+            $updateImage = uploadImage($_FILES);
+
+            if($updateImage){
+                $nameImgOld = getDataId($idData, $tabelName);
+                deleteImgInfolder($nameImgOld["foto_mahasiswa"]);
+
+                $updateQuerySql = "UPDATE $tabelName 
+                SET nim_mahasiswa='$nim_mahasiswa', nama_mahasiswa='$nameMahasiswa', tempat='$tempat', tanggal_lahir='$date', jenis_kelamin='$gender', alamat='$alamat', telepon='$telepon', email='$email', foto_mahasiswa='$updateImage'
+                WHERE id='$idData'";
+
+                mysqli_query($connectionDB, $updateQuerySql);
+                return mysqli_affected_rows($connectionDB);
+            }
+
         }else{
             $updateKegiatan = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["namaKegiatanUpdate"]));
             $updateDeskripsi = mysqli_real_escape_string($connectionDB, htmlspecialchars($data["deskripsiUpdate"]));
             $updateImage = uploadImage($_FILES);
             if($updateImage){
                 $nameImgOld = getDataId($idData, $tabelName);
-                deleteImgInfolder($nameImgOld["foto"]);
+                deleteImgInfolder($nameImgOld["foto_kegiatan"]);
     
                 $updateQuerySql = "UPDATE $tabelName 
-                SET nama_kegiatan='$updateKegiatan', deskripsi='$updateDeskripsi', foto='$updateImage' 
+                SET nama_kegiatan='$updateKegiatan', deskripsi='$updateDeskripsi', foto_kegiatan='$updateImage' 
                 WHERE id='$idData'";
                 
                 mysqli_query($connectionDB, $updateQuerySql);
