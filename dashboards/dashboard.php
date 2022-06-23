@@ -1,12 +1,13 @@
 <?php
   session_start();
 
+
  
   if (!isset($_SESSION['email']) || !isset($_SESSION['password'])) {
     ?>
 <script language="javascript">
 alert('Login dulu')
-document.location = 'index.php';
+document.location = '../account/login/index.php';
 </script>
 <?php
   } else {
@@ -53,7 +54,22 @@ document.location = 'index.php';
 </head>
 
 <body>
-    <?php include "header.php";?>
+    <?php 
+
+        $link = $_SERVER['PHP_SELF'];
+        $link_array = explode('/',$link);
+        $page = end($link_array);
+
+        if($page == "dashboard.php" && !isset($_GET["dashboard"])){
+            include "header.php";
+            
+        }else if(!in_array("laporan", explode("/", $_GET["dashboard"]))){
+            include "header.php";
+        }
+
+        
+    ?>
+
     <div class="container-fluid">
         <div class="row">
             <?php include "navbar.php";?>

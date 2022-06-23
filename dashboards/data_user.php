@@ -124,8 +124,8 @@
                                 </svg>
                             </a>
                         </td>
-                        </tr`>
-                        <?php endforeach?>
+                    </tr>
+                    <?php endforeach?>
                 </tbody>
             </table>
         </div>

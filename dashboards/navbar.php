@@ -31,12 +31,24 @@
                     Data User
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="dashboard.php?dashboard=laporan">
-                    <span data-feather="bar-chart-2"></span>
+
+            <div class="dropdown">
+                <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                    aria-expanded="false">
                     Laporan
-                </a>
-            </li>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="dashboard.php?dashboard=laporan/laporanDosen">Laporan
+                            Dosen</a></li>
+                    <li><a class="dropdown-item" href="dashboard.php?dashboard=laporan/laporanMahasiswa">Laporan
+                            Mahasiswa</a>
+                    </li>
+                    <li><a class="dropdown-item" href="dashboard.php?dashboard=laporan/laporanUser">Laporan
+                            User</a></li>
+                    <li><a class="dropdown-item" href="dashboard.php?dashboard=laporan/laporanKegiatan">Laporan
+                            Kegiatan</a></li>
+                </ul>
+            </div>
         </ul>
     </div>
 </nav>
