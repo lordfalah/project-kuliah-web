@@ -6,7 +6,6 @@
         $resultDataMhs = getDataId($_GET["id_mhs"], "user_mahasiswa");
     }
     
-    
 
 ?>
 
@@ -68,5 +67,14 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="d-flex gap-4">
+
+        <a style="color: white;" class="d-inline-block text-decoration-none bg-primary px-4 py-2 rounded fs-6"
+            href="update.php?id_update=<?php echo $_GET["id_mhs"]; ?>&mahasiswa=<?php echo $_GET["id_mhs"]; ?>">Update</a>
+
+        <a style="color: white;" class="d-inline-block text-decoration-none bg-secondary px-4 py-2 rounded fs-6"
+            href="dashboard.php?dashboard=data_mahasiswa">Back</a>
     </div>
 </div>
